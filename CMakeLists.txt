@@ -13,7 +13,7 @@ set(TEST_DIR "${CMAKE_CURRENT_SOURCE_DIR}/test")
 set(PROJECT_NAME  trafficRecorder)
 set(TEST_NAME UnitTest)
 
-file(GLOB HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h")
+file(GLOB HEADERS "${SRC_DIR}/*.h")
 file(GLOB SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 
 #--------------------------------------------------------------------------------------------------
@@ -38,6 +38,7 @@ endif()
 
 add_executable(${PROJECT_NAME}
     ${SOURCES}
+    ${SRC_DIR}/RtspClient/RtspClient.cpp #????????????
     ${HEADERS}
     )
 add_executable(${TEST_NAME}
@@ -53,9 +54,17 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 	CXX_STANDARD 17
 	CXX_STANDARD_REQUIRED ON
  )
+
+ target_include_directories(${PROJECT_NAME} PUBLIC
+ ${SRC_DIR}/QueueFrame
+ ${SRC_DIR}/RtspClient
+ )
  
 #--------------------------------------------------------------------------------------------------
 # link libraries
+if(POLICY CMP0074)
+  cmake_policy(SET CMP0074 OLD)
+endif()
 if(CONAN_PKG)
     message("Create with Conan")
     find_package(Boost 1.74 CONFIG REQUIRED)

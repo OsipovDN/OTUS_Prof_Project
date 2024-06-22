@@ -1,43 +1,32 @@
 ﻿#include <iostream>
+
+#include "RtspClient.h"
+#include "QueueFrame.h"
+
 #include <opencv2/opencv.hpp>
 
 int main() {
-    // RTSP stream URL
-    std::string rtsp_url = "rtsp://192.168.1.206:8554/mjpeg/1";
+	// RTSP stream URL
+	std::string rtsp_url = "rtsp://192.168.1.206:8554/mjpeg/1";
+	auto client = client::RtspClient::getInstance();
+	if (client == nullptr)
+	{
+		std::cerr << "Streams client not created"<< std::endl;
+	}
+	auto id = client->addCapture(rtsp_url);
+	if(id==-1)
+	{
+		std::cerr<< "Stream is not created"<< std::endl;
+	}
+	else
+	{
+		std::cout << "Stream with id= " << id << " created" << std::endl;
 
-    // Open the RTSP stream
-    cv::VideoCapture cap(rtsp_url);
+		client->start(id);
 
-    // Check if the stream is opened successfully
-    if (!cap.isOpened()) {
-        std::cerr << "Error: Couldn't open the RTSP stream." << std::endl;
-        return -1;
-    }
+		// Release the VideoCapture object and close the OpenCV windows
+		
+	}
 
-    // Main loop to read frames from the RTSP stream
-    cv::Mat frame;
-    while (true) {
-        // Read a frame
-        cap >> frame;
-
-        // Check if the frame is empty
-        if (frame.empty()) {
-            std::cerr << "Error: Frame is empty." << std::endl;
-            break;
-        }
-
-        // Display the frame (optional)
-        cv::imshow("RTSP Stream", frame);
-
-        // Wait for a key press, break the loop if 'q' is pressed
-        if (cv::waitKey(1) == 'q') {
-            break;
-        }
-    }
-
-    // Release the VideoCapture object and close the OpenCV windows
-    cap.release();
-    cv::destroyAllWindows();
-
-    return 0;
+	return 0;
 }

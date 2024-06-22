@@ -1,4 +1,13 @@
-#include "asyncServer_gtest.h"
+#include <gtest/gtest.h>
+
+TEST(Version, TestVersionCount) {
+    // Arrange
+
+    // Assert
+
+}
+
+
 
 int main(int argc, char** argv) {
     testing::InitGoogleTest(&argc, argv);

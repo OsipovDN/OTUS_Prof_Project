@@ -20,6 +20,11 @@ file(GLOB SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 # project
 project(${PROJECT_NAME} VERSION ${PROJECT_VESRION})
 
+if (MSVC)
+	# enable VS-Solution filters support
+	set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+endif (MSVC)
+
 #--------------------------------------------------------------------------------------------------
 # builds
 if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
@@ -36,10 +41,15 @@ add_executable(${PROJECT_NAME}
     ${HEADERS}
     )
 add_executable(${TEST_NAME}
-    ${TEST_DIR}
+    ${TEST_DIR}/trafficRecorder_gtest.cpp
     )
 
-set_target_properties(${PROJECT_NAME} ${TEST_NAME} PROPERTIES
+set_target_properties(${PROJECT_NAME} PROPERTIES
+	CXX_STANDARD 17
+	CXX_STANDARD_REQUIRED ON
+ )
+
+ set_target_properties(${TEST_NAME} PROPERTIES
 	CXX_STANDARD 17
 	CXX_STANDARD_REQUIRED ON
  )
@@ -48,7 +58,7 @@ set_target_properties(${PROJECT_NAME} ${TEST_NAME} PROPERTIES
 # link libraries
 if(CONAN_PKG)
     message("Create with Conan")
-    find_package(Boost CONFIG REQUIRED)
+    find_package(Boost 1.74 CONFIG REQUIRED)
     find_package(OpenCV CONFIG REQUIRED)
     find_package(GTest CONFIG REQUIRED)
 
@@ -59,11 +69,11 @@ else()
     message("Create with vcpkg or nativ ")
     # Boost
     #
-    find_package (Boost 1.83 REQUIRED)
+    find_package (Boost 1.74 REQUIRED)
     if(Boost_FOUND)
     	target_include_directories(${PROJECT_NAME} PRIVATE ${Boost_INCLUDE_DIRS})
     	target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
-     	#target_link_libraries(${PROJECT_NAME} PRIVATE libasync ${Boost_LIBRARIES})
+     	#target_link_libraries(${PROJECT_NAME} PRIVATE ${Boost_LIBRARIES})
      endif(Boost_FOUND)
      #
      # OpenCV
@@ -77,13 +87,23 @@ else()
     #
     find_package(GTest REQUIRED)
     target_include_directories(${TEST_NAME} 
-	PRIVATE
-	${SRC_DIR}
-	${GTEST_INCLUDE_DIRS}
-	${GTEST_LIBRARY}
-	${GTEST_MAIN_LIBRARY}
- 	)
+	    PRIVATE
+	    ${SRC_DIR}
+        ${TEST_DIR}
+	    ${GTEST_INCLUDE_DIR}
+	    #${GTEST_LIBRARY}
+        #${GTEST_INCLUDE_DIR}
+	    #${GTEST_MAIN_LIBRARY}
+ 	    )
     target_link_libraries(${TEST_NAME} PRIVATE ${GTEST_BOTH_LIBRARIES})
+
+    #target_link_libraries(${TEST_NAME} 
+	#PRIVATE
+	#GTest::gtest 
+	#GTest::gtest_main 
+	#GTest::gmock 
+	#GTest::gmock_main
+    #)
 endif()
 
 #--------------------------------------------------------------------------------------------------
@@ -108,12 +128,12 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     target_compile_options(${PROJECT_NAME} PRIVATE
         /EHsc
-        /W4
+        #/W4
         /WX
     )
     target_compile_options(${TEST_NAME} PRIVATE
         /EHsc
-        /W4
+        #/W4
         /WX
     )
 endif()

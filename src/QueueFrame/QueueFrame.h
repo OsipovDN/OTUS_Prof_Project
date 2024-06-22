@@ -7,9 +7,7 @@
 #include <condition_variable> 
 //OpenCV
 #include <opencv2/opencv.hpp>
-
 #include "IQueueFrame.h"
-
 
 /**
  * @brief Queue for storing frames

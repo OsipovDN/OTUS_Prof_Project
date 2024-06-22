@@ -14,12 +14,12 @@ set(PROJECT_NAME  trafficRecorder)
 set(TEST_NAME UnitTest)
 
 file(GLOB HEADERS CONFIGURE_DEPENDS
-    "${SRC_DIR}/*.h"
     "${SRC_DIR}/RtspClient/*.h"
     )
 file(GLOB SOURCES CONFIGURE_DEPENDS
     "${SRC_DIR}/*.cpp"
     "${SRC_DIR}/RtspClient/*.cpp"
+    "${SRC_DIR}/QueueFrame/*.cpp"
     )
 
 #--------------------------------------------------------------------------------------------------
@@ -30,7 +30,6 @@ if (MSVC)
 	# enable VS-Solution filters support
 	set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 endif (MSVC)
-
 #--------------------------------------------------------------------------------------------------
 # builds
 if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
@@ -61,8 +60,10 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
  )
 
  target_include_directories(${PROJECT_NAME} PUBLIC
+    ${SRC_DIR}
     ${SRC_DIR}/QueueFrame
     ${SRC_DIR}/RtspClient
+    ${SRC_DIR}/QueueFrame
     )
  
 #--------------------------------------------------------------------------------------------------

@@ -1,7 +1,6 @@
 ﻿#include <iostream>
 
 #include "RtspClient.h"
-#include "QueueFrame.h"
 
 int main() {
 	// RTSP stream URL

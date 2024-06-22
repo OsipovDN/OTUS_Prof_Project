@@ -3,8 +3,6 @@
 #include "RtspClient.h"
 #include "QueueFrame.h"
 
-#include <opencv2/opencv.hpp>
-
 int main() {
 	// RTSP stream URL
 	std::string rtsp_url = "rtsp://192.168.1.206:8554/mjpeg/1";

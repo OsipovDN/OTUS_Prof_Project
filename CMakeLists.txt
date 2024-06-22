@@ -13,8 +13,14 @@ set(TEST_DIR "${CMAKE_CURRENT_SOURCE_DIR}/test")
 set(PROJECT_NAME  trafficRecorder)
 set(TEST_NAME UnitTest)
 
-file(GLOB HEADERS "${SRC_DIR}/*.h")
-file(GLOB SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+file(GLOB HEADERS CONFIGURE_DEPENDS
+    "${SRC_DIR}/*.h"
+    "${SRC_DIR}/RtspClient/*.h"
+    )
+file(GLOB SOURCES CONFIGURE_DEPENDS
+    "${SRC_DIR}/*.cpp"
+    "${SRC_DIR}/RtspClient/*.cpp"
+    )
 
 #--------------------------------------------------------------------------------------------------
 # project
@@ -37,9 +43,8 @@ if(CCACHE_PROGRAM)
 endif()
 
 add_executable(${PROJECT_NAME}
-    ${SOURCES}
-    ${SRC_DIR}/RtspClient/RtspClient.cpp #????????????
-    ${HEADERS}
+    ${SOURCES}  
+    #${HEADERS}
     )
 add_executable(${TEST_NAME}
     ${TEST_DIR}/trafficRecorder_gtest.cpp
@@ -56,9 +61,9 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
  )
 
  target_include_directories(${PROJECT_NAME} PUBLIC
- ${SRC_DIR}/QueueFrame
- ${SRC_DIR}/RtspClient
- )
+    ${SRC_DIR}/QueueFrame
+    ${SRC_DIR}/RtspClient
+    )
  
 #--------------------------------------------------------------------------------------------------
 # link libraries

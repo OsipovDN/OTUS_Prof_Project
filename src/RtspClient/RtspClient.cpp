@@ -77,7 +77,7 @@ namespace client
 			if (frame.empty())
 			{
 				std::cerr << "Error: Frame is empty." << std::endl;
-				break;
+				continue;
 			}
 			_queueFrame->push(frame);
 		}

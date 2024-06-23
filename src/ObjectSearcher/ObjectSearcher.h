@@ -57,20 +57,23 @@ public:
 			}
 
 			std::vector<cv::Rect> found = detect(img);
-			for (std::vector<cv::Rect>::iterator i = found.begin(); i != found.end(); ++i)
+			if (!found.empty())
 			{
-				cv::Rect& r = *i;
-				adjustRect(r);
-				cv::rectangle(img, r.tl(), r.br(), cv::Scalar(0, 255, 0), 2);
+				for (std::vector<cv::Rect>::iterator i = found.begin(); i != found.end(); ++i)
+				{
+					cv::Rect& r = *i;
+					adjustRect(r);
+					cv::rectangle(img, r.tl(), r.br(), cv::Scalar(0, 255, 0), 2);
+				}
 			}
-			cv::imshow("People", img);
+			/*cv::imshow("People", img);
 			if (cv::waitKey(1) == 'q')
 			{
 				break;
-			}
-
+			}*/
+			std::cout<<_queueFrame->size()<<std::endl;
 		}
-		cv::destroyWindow("People");
+		//cv::destroyWindow("People");
 	}
 
 };

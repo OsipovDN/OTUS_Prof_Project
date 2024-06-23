@@ -40,23 +40,20 @@ public:
 	void startSearch()
 	{
 		cv::Mat img;
+		std::vector<cv::Rect> found;
+		cv::Rect r;
+		auto sc = cv::Scalar(0, 255, 0);
 		for (;;)
 		{
 			img = _queueFrame->front();
-			if (img.empty())
-			{
-				std::cout << "Finished reading: empty frame" << std::endl;
-				break;
-			}
-
-			std::vector<cv::Rect> found = detect(img);
+			found = detect(img);
 			if (!found.empty())
 			{
 				for (std::vector<cv::Rect>::iterator i = found.begin(); i != found.end(); ++i)
 				{
-					cv::Rect& r = *i;
+					r = *i;
 					adjustRect(r);
-					cv::rectangle(img, r.tl(), r.br(), cv::Scalar(0, 255, 0), 2);
+					cv::rectangle(img, r.tl(), r.br(), sc, 2);
 				}
 			}
 			cv::imshow("People", img);
@@ -66,7 +63,7 @@ public:
 			}
 			std::cout<<_queueFrame->size()<<std::endl;
 		}
-		//cv::destroyWindow("People");
+		cv::destroyWindow("People");
 	}
 
 };

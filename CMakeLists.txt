@@ -40,7 +40,7 @@ find_program(CCACHE_PROGRAM ccache)
 if(CCACHE_PROGRAM)
     set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ${CCACHE_PROGRAM})
 endif()
-
+add_subdirectory(src/)
 add_executable(${PROJECT_NAME}
     ${SOURCES}  
     #${HEADERS}
@@ -63,7 +63,6 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     ${SRC_DIR}
     ${SRC_DIR}/QueueFrame
     ${SRC_DIR}/RtspClient
-    ${SRC_DIR}/QueueFrame
     )
  
 #--------------------------------------------------------------------------------------------------
@@ -73,30 +72,30 @@ if(POLICY CMP0074)
 endif()
 if(CONAN_PKG)
     message("Create with Conan")
-    find_package(Boost 1.74 CONFIG REQUIRED)
-    find_package(OpenCV CONFIG REQUIRED)
+    #find_package(Boost 1.74 CONFIG REQUIRED)
+    #find_package(OpenCV CONFIG REQUIRED)
     find_package(GTest CONFIG REQUIRED)
 
-    target_link_libraries(${PROJECT_NAME} boost::boost)
-    target_link_libraries(${PROJECT_NAME} opencv::opencv)
+    #target_link_libraries(${PROJECT_NAME} boost::boost)
+    #target_link_libraries(${PROJECT_NAME} opencv::opencv)
     target_link_libraries(${PROJECT_NAME} GTest::gmock GTest::gtest GTest::gmock_main GTest::gtest_main)
 else()
     message("Create with vcpkg or nativ ")
     # Boost
     #
-    find_package (Boost 1.74 REQUIRED)
-    if(Boost_FOUND)
-    	target_include_directories(${PROJECT_NAME} PRIVATE ${Boost_INCLUDE_DIRS})
-    	target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
+    #find_package (Boost 1.74 REQUIRED)
+    #if(Boost_FOUND)
+    #	target_include_directories(${PROJECT_NAME} PRIVATE ${Boost_INCLUDE_DIRS})
+    #	target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
      	#target_link_libraries(${PROJECT_NAME} PRIVATE ${Boost_LIBRARIES})
-     endif(Boost_FOUND)
+     #endif(Boost_FOUND)
      #
      # OpenCV
      #
-    find_package(OpenCV REQUIRED)
-    include_directories(${OpenCV_INCLUDE_DIRS})
-    target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})
-    target_include_directories(${PROJECT_NAME} PUBLIC ${LIB_INCLUDE_DIR})
+    #find_package(OpenCV REQUIRED)
+    #include_directories(${OpenCV_INCLUDE_DIRS})
+    #target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})
+    #target_include_directories(${PROJECT_NAME} PUBLIC ${LIB_INCLUDE_DIR})
     #
     # GTest
     #

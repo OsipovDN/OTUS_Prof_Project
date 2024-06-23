@@ -70,10 +70,10 @@ namespace client
 	void RtspClient::toStart(int id)
 	{
 		cv::Mat frame;
-		
+		auto captor = _captors[id];
 		while (true)
 		{
-			_captors[id] >> frame;
+			captor >> frame;
 			if (frame.empty())
 			{
 				std::cerr << "Error: Frame is empty." << std::endl;
@@ -81,6 +81,5 @@ namespace client
 			}
 			_queueFrame->push(frame);
 		}
-		
 	}
 }

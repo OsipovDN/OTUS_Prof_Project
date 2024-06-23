@@ -2,8 +2,10 @@
 
 void QueueFrame::push(cv::Mat& frame)
 {
+	static int i = 0;
 	std::unique_lock<std::mutex> lg(_mut);
 	_queueFrame.push(frame);
+	//std::cout << i++<<std::endl;
 	_cond.notify_one();
 }
 
@@ -20,8 +22,5 @@ cv::Mat QueueFrame::front()
 
 bool QueueFrame::empty() const { return _queueFrame.empty(); }
 
-void QueueFrame::print(cv::Mat& c)const
-{
-}
 
 

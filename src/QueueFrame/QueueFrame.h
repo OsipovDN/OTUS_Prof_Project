@@ -30,9 +30,8 @@ public:
 	//IQueue
 	void push(cv::Mat& frame) override;
 	cv::Mat front() override;
+	size_t size() const override {return _queueFrame.size();};
 	bool empty() const override;
 	//IQueue
-
-	void print(cv::Mat& c)const;
 
 };

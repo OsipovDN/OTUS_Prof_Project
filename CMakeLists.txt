@@ -13,13 +13,14 @@ set(TEST_DIR "${CMAKE_CURRENT_SOURCE_DIR}/test")
 set(PROJECT_NAME  trafficRecorder)
 set(TEST_NAME UnitTest)
 
-file(GLOB HEADERS CONFIGURE_DEPENDS
-    "${SRC_DIR}/RtspClient/*.h"
-    )
+#file(GLOB HEADERS CONFIGURE_DEPENDS
+    #"${SRC_DIR}/RtspClient/*.h"
+#    )
 file(GLOB SOURCES CONFIGURE_DEPENDS
     "${SRC_DIR}/*.cpp"
     "${SRC_DIR}/RtspClient/*.cpp"
     "${SRC_DIR}/QueueFrame/*.cpp"
+    "${SRC_DIR}/ObjectSearcher/*.cpp"
     )
 
 #--------------------------------------------------------------------------------------------------
@@ -42,8 +43,7 @@ if(CCACHE_PROGRAM)
 endif()
 
 add_executable(${PROJECT_NAME}
-    ${SOURCES}  
-    #${HEADERS}
+    ${SOURCES}
     )
 add_executable(${TEST_NAME}
     ${TEST_DIR}/trafficRecorder_gtest.cpp
@@ -63,7 +63,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     ${SRC_DIR}
     ${SRC_DIR}/QueueFrame
     ${SRC_DIR}/RtspClient
-    ${SRC_DIR}/QueueFrame
+    ${SRC_DIR}/ObjectSearcher
     )
  
 #--------------------------------------------------------------------------------------------------
@@ -88,7 +88,6 @@ else()
     if(Boost_FOUND)
     	target_include_directories(${PROJECT_NAME} PRIVATE ${Boost_INCLUDE_DIRS})
     	target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
-     	#target_link_libraries(${PROJECT_NAME} PRIVATE ${Boost_LIBRARIES})
      endif(Boost_FOUND)
      #
      # OpenCV
@@ -107,18 +106,8 @@ else()
         ${TEST_DIR}
 	    ${GTEST_INCLUDE_DIR}
 	    #${GTEST_LIBRARY}
-        #${GTEST_INCLUDE_DIR}
-	    #${GTEST_MAIN_LIBRARY}
  	    )
     target_link_libraries(${TEST_NAME} PRIVATE ${GTEST_BOTH_LIBRARIES})
-
-    #target_link_libraries(${TEST_NAME} 
-	#PRIVATE
-	#GTest::gtest 
-	#GTest::gtest_main 
-	#GTest::gmock 
-	#GTest::gmock_main
-    #)
 endif()
 
 #--------------------------------------------------------------------------------------------------

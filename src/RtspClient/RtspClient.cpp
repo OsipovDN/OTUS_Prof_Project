@@ -6,14 +6,16 @@ namespace client
 	RtspClient::~RtspClient() {
 		if (_client)
 		{
+			for (auto i = 0; i < _streams.size(); ++i)
+				_streams[i].join();
 			delete _client;
 		}
 	};
-	RtspClient* RtspClient::getInstance()
+	RtspClient* RtspClient::getInstance(std::shared_ptr<IQueueFrame> queueFrame)
 	{
 		if (_client == nullptr)
 		{
-			_client = new RtspClient();
+			_client = new RtspClient(queueFrame);
 		}
 		return _client;
 	}
@@ -28,23 +30,47 @@ namespace client
 		else
 		{
 			int id = _captors.size() + 1;
-			sourceInfo src{ rtspUrl,"tratata" };
-			_streamsInfo.insert(std::make_pair(id, src));
+			SourceInfo src{ id, rtspUrl,"tratata" };
+			_streamsInfo.push_back(src);
 			_captors.emplace(id, std::move(capture));
+			std::cout << "Create capture id: " << id << std::endl;
 			return id;
 		}
 	}
 
 	void RtspClient::releaseCapture(int id)
 	{
-		_captors[id].release();
-		_captors.erase(id);
+		if (id != -1)
+		{
+			_captors[id].release();
+			auto InfoIt = _streamsInfo.begin();
+			while (InfoIt != _streamsInfo.end())
+			{
+				if (InfoIt->id == id)
+				{
+					_streamsInfo.erase(InfoIt);
+					break;
+				}
+				InfoIt++;
+			}
+			_captors.erase(id);
+		}
+		else
+		{
+			for (auto capture : _captors)
+				capture.second.release();
+			_captors.clear();
+			_streamsInfo.clear();
+		}
 	}
-
 	void RtspClient::start(int id)
 	{
+		_streams.push_back(std::thread(&RtspClient::toStart, this, id));
+	}
+	void RtspClient::toStart(int id)
+	{
 		cv::Mat frame;
-		std::string wiev = "Stream" + id;
+		
 		while (true)
 		{
 			_captors[id] >> frame;
@@ -53,14 +79,8 @@ namespace client
 				std::cerr << "Error: Frame is empty." << std::endl;
 				break;
 			}
-
-			cv::imshow(wiev, frame);
-			if (cv::waitKey(1) == 'q')
-			{
-				break;
-			}
+			_queueFrame->push(frame);
 		}
-		releaseCapture(id);
-		cv::destroyWindow(wiev);
+		
 	}
 }

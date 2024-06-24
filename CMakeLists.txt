@@ -13,16 +13,12 @@ set(TEST_DIR "${CMAKE_CURRENT_SOURCE_DIR}/test")
 set(PROJECT_NAME  trafficRecorder)
 set(TEST_NAME UnitTest)
 
-#file(GLOB HEADERS CONFIGURE_DEPENDS
-    #"${SRC_DIR}/RtspClient/*.h"
-#    )
 file(GLOB SOURCES CONFIGURE_DEPENDS
     "${SRC_DIR}/*.cpp"
     "${SRC_DIR}/RtspClient/*.cpp"
     "${SRC_DIR}/QueueFrame/*.cpp"
     "${SRC_DIR}/ObjectSearcher/*.cpp"
     )
-
 #--------------------------------------------------------------------------------------------------
 # project
 project(${PROJECT_NAME} VERSION ${PROJECT_VESRION})

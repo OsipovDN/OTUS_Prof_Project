@@ -5,9 +5,11 @@
 #include "QueueFrame.h"
 #include "ObjectSearcher.h"
 
+#define URL "rtsp://...."
+
 int main() {
 	// RTSP stream URL
-	std::string rtsp_url = "rtsp://192.168.1.206:8554/mjpeg/1";
+	std::string rtsp_url = URL;
 	//Читаем из стрима данные
 	auto queue= std::make_shared<queue::QueueFrame>() ;
 	auto client = client::RtspClient::getInstance(queue);

@@ -35,7 +35,7 @@ cd "./project_dir"
 conan install conanfile.txt --build=missing
 ```
 - Создается файл "CMakeUserPresets" в корневой папке
-- Создается папка build из-за опции в "conanfile"  
+- Создается папка `./build` из-за опции в "conanfile"  
 > [layout]  
 > cmake_layout
 

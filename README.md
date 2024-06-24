@@ -1,4 +1,4 @@
-## Build local Linux
+## Build Linux
 ```shell
 sudo apt-get update && sudo apt-get install libgtest-dev libboost-all-dev -y
 cd "./project_dir"
@@ -24,7 +24,7 @@ cmake ../opencv-4.9
 # Build
 cmake --build .
 ```
-## Build local Windows
+## Build Windows
 Если используется пакетный менеджер Conan, то перед сборкой проекта необходимо установить флаг CONAN_PKG опции (по умолчанию OFF)
 ```shell
 cmake . -DCONAN_PKG=ON

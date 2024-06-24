@@ -45,3 +45,8 @@ conan install conanfile.txt --build=missing
 cmake --preset conan-default
 cmake --build . --preset conan-release
 ```
+
+## Для запуска считывания потоковых данных в main надо указать URL камеры в 
+```shell
+#define URL "rtsp://...."
+```

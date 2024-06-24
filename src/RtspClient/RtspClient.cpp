@@ -10,7 +10,8 @@ namespace client
 				_streams[i].join();
 			delete _client;
 		}
-	};
+	}
+
 	RtspClient* RtspClient::getInstance(std::shared_ptr<IQueueFrame> queueFrame)
 	{
 		if (_client == nullptr)
@@ -19,6 +20,7 @@ namespace client
 		}
 		return _client;
 	}
+
 	int RtspClient::addCapture(std::string& rtspUrl)
 	{
 		cv::VideoCapture capture(rtspUrl);
@@ -63,15 +65,17 @@ namespace client
 			_streamsInfo.clear();
 		}
 	}
+
 	void RtspClient::start(int id)
 	{
 		_streams.push_back(std::thread(&RtspClient::toStart, this, id));
 	}
+
 	void RtspClient::toStart(int id)
 	{
 		cv::Mat frame;
 		auto captor = _captors[id];
-		while (true)
+		while (captor.isOpened())
 		{
 			captor >> frame;
 			if (frame.empty())
@@ -81,5 +85,25 @@ namespace client
 			}
 			_queueFrame->push(frame);
 		}
+	}
+
+	void RtspClient::showAll()
+	{
+		cv::Mat frame;
+		while (true) {
+			for (auto capture : _captors)
+			{
+				if (capture.second.read(frame))
+				{
+					cv::imshow("RTSP Stream " + std::to_string(capture.first), frame);
+				}
+			}
+			if (cv::waitKey(1) == 'q')
+			{
+				break;
+			}
+		}
+		releaseCapture();
+		cv::destroyAllWindows();
 	}
 }

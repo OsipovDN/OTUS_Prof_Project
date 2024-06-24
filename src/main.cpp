@@ -1,5 +1,6 @@
-﻿#include <iostream>
-
+﻿//STL
+#include <iostream>
+//project include
 #include "RtspClient.h"
 #include "QueueFrame.h"
 #include "ObjectSearcher.h"
@@ -8,7 +9,7 @@ int main() {
 	// RTSP stream URL
 	std::string rtsp_url = "rtsp://192.168.1.206:8554/mjpeg/1";
 	//Читаем из стрима данные
-	auto queue= std::make_shared<QueueFrame>() ;
+	auto queue= std::make_shared<queue::QueueFrame>() ;
 	auto client = client::RtspClient::getInstance(queue);
 	
 	if (client == nullptr)
@@ -28,8 +29,9 @@ int main() {
 	}
 	
 	client->start(id);
+
 	//Обрабатываем данные полученные из стрима
-	ObjectSearcher searcher(queue);
+	searcher::ObjectSearcher searcher(queue);
 	searcher.startSearch();
 	client->releaseCapture();
 	//client->showAll();
